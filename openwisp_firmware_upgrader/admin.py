@@ -173,7 +173,7 @@ class BuildAdmin(BaseAdmin):
                     'in this page. Refresh the page from time to time to check '
                     'its progress.'
                 )
-                self.message_user(request, mark_safe(text), messages.SUCCESS)
+                self.message_user(request, format_html(text), messages.SUCCESS)
                 url = reverse(
                     f'admin:{app_label}_batchupgradeoperation_change', args=[batch.pk]
                 )
@@ -206,7 +206,7 @@ class BuildAdmin(BaseAdmin):
                 'media': self.media,
             }
         )
-        request.current_app = self.admin_site.name
+
         return TemplateResponse(
             request,
             [
@@ -266,9 +266,8 @@ class ReadonlyUpgradeOptionsMixin:
             options.append(
                 f'<li><img src="{icon_url}" alt="{option_used}">{option_title}</li>'
             )
-        return format_html(
-            mark_safe(f'<ul class="readonly-upgrade-options">{"".join(options)}</ul>')
-        )
+        options_html = "".join(options)
+        return format_html('<ul class="readonly-upgrade-options">{}</ul>', options_html)
 
 
 @admin.register(BatchUpgradeOperation)
